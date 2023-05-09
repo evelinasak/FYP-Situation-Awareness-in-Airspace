@@ -1,4 +1,4 @@
-# Final Year Project Code
+# Final Year Project MATLAB Code
 MATLAB code for Final Year Project: Situation Awareness in Airspace - Inspection of Flight Data, Modelling and Improvements. The presented code extracts and clusters aircraft trajectories and models landing pattern at a selected airfield. 
 
 In the main folder there are 4 main files which are used sequentially in the following order:
