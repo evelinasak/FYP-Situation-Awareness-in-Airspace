@@ -1,4 +1,3 @@
-# FYP-Situation-Awareness-in-Airspace
 # Final Year Project Code
 MATLAB code for Final Year Project: Situation Awareness in Airspace - Inspection of Flight Data, Modelling and Improvements. The presented code extracts and clusters aircraft trajectories and models landing pattern at a selected airfield. 
 
