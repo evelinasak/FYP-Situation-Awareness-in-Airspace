@@ -1,0 +1,25 @@
+//This code extracts turning points (TPs) for one specific state Q
+    FOR every landing trajectory N at runway 1 
+        FOR every row in filtered trajectories file 'ClustTraj1'
+            COUNT trajectory N length n
+        END LOOP
+        FOR every trajectory N point n
+            READ trajectory N heading_1 at n-1
+            READ longitude x and latitude y at each point 
+            IF x and y are within state Q boundaries 
+                READ trajectory heading_2 at point n  
+                FIND absolute heading_2 - heading_1 value ABS
+                IF ABS > 1 and ABS < 30 //1 and 30 are degrees
+                    WRITE to an array TP trajectory point n and ABS
+                END IF  
+            END IF  
+        END LOOP 
+        IF TP is not empty
+            FIND maximum heading value in TP
+            WRITE maximum heading value and trajectory N data to file max_tp_all_Q 
+        END IF 
+            //more if statements can be added to find 2nd, 3rd etc. maximum heading
+            //values per trajectory in a specific state Q
+    END LOOP 
+    
+    written using: https://pseudocode.deepjain.com/
