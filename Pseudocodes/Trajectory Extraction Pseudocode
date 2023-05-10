@@ -1,0 +1,57 @@
+//This code extracts aircraft trajectories
+//STEP 1 - sorting data based on the aircraft
+    LOAD raw data 
+    SET aircraft_ID_list = [] 
+    
+    FOR every row in raw data
+        READ aircraft_ID
+        IF aircraft_ID not in aircraft_ID_list
+           add aircraft_ID to the aircraft_ID_list
+        END IF
+    END LOOP
+    
+    FOR every aircraft_ID_list row 
+        FOR every row in raw data
+            READ aircraft_ID
+            IF aircraft_ID is equal to aircraft_ID_list
+                WRITE raw data row record into a new file 'trajectories1'
+                END IF
+        END LOOP
+    END LOOP
+    
+//STEP 2 - separating trajectories 
+SET breakpoint = 1
+SET t1 as the first time record in 'trajectories1'
+    WHILE breakpoint less than rows in 'trajectories1'
+        COUNT trajectory length
+        FOR every point in a trajectory
+            SET t2 as the current time record in a trajectory
+            dt = t2-t1
+            IF dt > 3 seconds
+                PRINT break = 1 in the 'trajectories1' file indicating new trajectory
+            END IF
+            SET t1 = t2
+        END LOOP 
+    SET breakpoint = breakpoint + trajectory length
+    END WHILE
+
+//STEP 3 - filtering trajectories
+SET breakpoint = 1
+    WHILE breakpoint is less than rows in 'trajectories1'
+        COUNT trajectory length
+        READ trajectory aircraft_ID
+        IF aircraft ID is not helicopter
+            SET include1 = 1 
+        END IF
+        FOR every point in a trajectory
+            IF a point goes above the runway area X 
+                INCREMENT include2 by 1 
+            END IF
+        END LOOP
+        IF include1 and include2 > 0 
+            EXTRACT trajectory to a file 'ClustTraj1'
+        END IF
+    END WHILE
+        
+        
+    written using: https://pseudocode.deepjain.com/
