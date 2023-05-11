@@ -1,44 +1,41 @@
-
 //This code clusters aircraft trajectories
 //PART 1: clustering based on runway
     //extract first and last trajectory points
     FOR every row in filtered trajectories file 'ClustTraj1'
-        READ trajectory_point_number
-        IF trajectory_point_number == 1 
-            EXTRACT corresponding data row into a file 'traj_fow_clust1'
+        READ trajectory_point_number n
+        IF trajectory_point_number n == 1 
+            EXTRACT corresponding trajectory data row into a file 'traj_fow_clust1'//extracting first trajectory point i_1
         END IF 
-            COUNT trajectory length 
-            EXTRACT trajectory data at row = length to a file 'traj_for_clust1'
+            COUNT trajectory i length 
+            EXTRACT trajectory i data at row = length to a file 'traj_for_clust1' //extracting last trajectory point i_N
     END LOOP
     
     //find if first or last point is closer to the runway and to which runway the coordinate corrseponds to
 SET runway origin coordinates x1 and y1
     FOR every row in filtered trajectories file 'ClustTraj1'
-            READ longitude x2_1 and latitude y2_1 data of first trajectory point
-            READ longitude x2_2 and latitude y2_2 data of last trajectory point
-            FIND distance1 = sqrt((x2_1-x1)^2+(y2_1-y1)^2) between runway origin and first trajectory point
-            FIND distance2 = sqrt((x2_2-x1)^2+(y2_2-y1)^2) between runway origin and last trajectory point
+            READ longitude x2_1 and latitude y2_1 data of first trajectory point i_n
+            READ longitude x2_2 and latitude y2_2 data of last trajectory point i_N
+            FIND distance1 = sqrt((x2_1-x1)^2+(y2_1-y1)^2) between runway origin and i_n
+            FIND distance2 = sqrt((x2_2-x1)^2+(y2_2-y1)^2) between runway origin and i_N
             IF distance1<distance2 
-                WRITE 1 to 'traj_for_clust1' first trajectory point USE row 
+                WRITE 1 to 'traj_for_clust1' USE column at i_n
             ELSE 
-                WRITE 1 to 'traj_for_clust1' last trajectory point USE row 
+                WRITE 1 to 'traj_for_clust1'  USE column at i_N
             END IF
     END LOOP
 
 SET runway point R1_P1, R1_P2, R2_P1, R2_P2 coordinates
-    FOR every row in filtered trajectories file 'traj_for_clust1'
+    FOR every row in 'traj_for_clust1'
         IF USE == 1
             READ longitude x and latitude y of each data entry 
             FIND distances between x,y and each runway point coordinates and store in array dist
-            FIND minimum distance and array index I 
+            FIND minimum distance and array index I corresponding to min distance 
                 IF I == 1 or I == 2
-                    READ longitude x and latitude y at each entry
                     IF x and y go above runway BOX 1 or BOX 2
                         WRITE 1 in 'traj_for_clust1' file column RUNWAY  //RUNWAY = 1 is for runway 1
                         EXTRACT trajectory at current row number to file 'runway_1'
                      END IF 
                 ELSE  
-                    READ longitude x and latitude y at each entry
                     IF x and y go above runway BOX 3 or BOX 4
                         WRITE 2 in 'traj_for_clust1' file column RUNWAY //RUNWAY = 1 is for runway 1
                         EXTRACT trajectory at current row number to file 'runway_2'
@@ -59,5 +56,7 @@ SET runway point R1_P1, R1_P2, R2_P1, R2_P2 coordinates
             END IF
          END LOOP 
     END LOOP 
+    
+    
     
     written using: https://pseudocode.deepjain.com/
